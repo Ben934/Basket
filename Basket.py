@@ -66,6 +66,9 @@ for n in range(1, n_steps):
         perf_remplaçant += recovery_rate * (P_max - perf_remplaçant)
         P_remplaçant[n] = perf_remplaçant
 
+# Calcul de la performance moyenne du joueur en jeu
+total_perf_moyenne = np.mean(P_en_jeu)
+
 # Ajout du slider pour voir les rotations avec prise en charge des flèches directionnelles
 minute = st.slider("Minute du match", 0, n_steps-1, 0, key="minute_slider")
 status = rotation[minute]
@@ -96,3 +99,17 @@ ax.legend()
 ax.grid(True)
 
 st.pyplot(fig)
+
+# Affichage de la performance moyenne
+st.write(f"Performance moyenne du joueur en jeu sur la durée du match : {total_perf_moyenne:.2f} %")
+
+# Création d'un DataFrame avec les valeurs des performances à chaque étape
+df = pd.DataFrame({
+    'Temps (minutes)': np.arange(n_steps),
+    'Joueur Titulaire (%)': P_titulaire,
+    'Joueur Remplaçant (%)': P_remplaçant,
+    'Joueur en Jeu (%)': P_en_jeu
+})
+
+# Affichage du tableau des performances
+st.write("Tableau des performances des joueurs pendant le match :", df)
